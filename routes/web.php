@@ -37,17 +37,26 @@ Route::post('/login', [LoginController::class, 'login'])->middleware('guest')->n
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 
+// Route::group(['middleware', 'auth'], function () {
+// 	// Laundry
+// 	// Route::get('/laundry/{auth}', [PembayaranController::class, 'index'])->name('home_laundry')->middleware('auth');
+// 	Route::get('/dashboard/{auth}', [DashboardController::class, 'admin'])->name('dashboard')->middleware('auth');
+// 	Route::get('/pembayaranlaundry/{auth}', [PembayaranController::class, 'index'])->name('pembayaran');
+// 	// Route::get('/ubahStatus/{id}/{status}/laundry', [PembayaranController::class, 'ubah'])->name('ubah-status-laundry');
+// 	// Route::get('/tambahLaundry', [LaundryController::class, 'index'])->name('tambah.laundry');
+// 	// Route::post('/tambahLaundry', [LaundryController::class, 'tambah'])->name('tambah-laundry.perform');
+// 	// Route::post('/upload/{id}', [LaundryController::class, 'upload'])->name('upload-bukti');
+// 	// Route::delete('/hapuslaundry/{id}', [PembayaranController::class, 'destroy'])->name('delete-laundry');
+// 	Route::get('/dashboard/{auth}/category-laundry', [LaundryController::class, 'index'])->name('pages.categorylaundry');
 Route::group(['middleware', 'auth'], function () {
-	// Laundry
-	// Route::get('/laundry/{auth}', [PembayaranController::class, 'index'])->name('home_laundry')->middleware('auth');
 	Route::get('/dashboard/{auth}', [DashboardController::class, 'admin'])->name('dashboard')->middleware('auth');
 	Route::get('/pembayaranlaundry/{auth}', [PembayaranController::class, 'index'])->name('pembayaran');
-	// Route::get('/ubahStatus/{id}/{status}/laundry', [PembayaranController::class, 'ubah'])->name('ubah-status-laundry');
-	// Route::get('/tambahLaundry', [LaundryController::class, 'index'])->name('tambah.laundry');
-	// Route::post('/tambahLaundry', [LaundryController::class, 'tambah'])->name('tambah-laundry.perform');
-	// Route::post('/upload/{id}', [LaundryController::class, 'upload'])->name('upload-bukti');
-	// Route::delete('/hapuslaundry/{id}', [PembayaranController::class, 'destroy'])->name('delete-laundry');
 	Route::get('/dashboard/{auth}/category-laundry', [LaundryController::class, 'index'])->name('pages.categorylaundry');
+	Route::get('/dashboard/{auth}/cart-laundry', [LaundryController::class, 'cart'])->name('pages.cartlaundry');
+	Route::get('/dashboard/{auth}/input-detail/{category}', [LaundryController::class, 'inputDetail'])->name('pages.inputdetail');
+	Route::get('/dashboard/{auth}/history-laundry', [LaundryController::class, 'historyLaundry'])->name('pages.historylaundry');
+
+	
 
 	// Profile
 	Route::get('/dashboard/profile', [ProfileController::class, 'index'])->name('profile');

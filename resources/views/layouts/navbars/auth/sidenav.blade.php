@@ -44,7 +44,7 @@
                     <span class="nav-link-text ms-1">Order History</span>
                 </a> -->
                 @endif
-                <a class="nav-link {{ str_contains(request()->url(), 'pembayaranlaundry') == true ? 'active' : '' }}" href="{{ route('pembayaran', ['auth' => Auth::user()->auth]) }}">
+                <a class="nav-link {{ str_contains(request()->url(), 'history-laundry') == true ? 'active' : '' }}" href="{{route('pages.historylaundry', ['auth' => 'admin']) }}"> 
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-bag-17 text-success text-sm opacity-10"></i>

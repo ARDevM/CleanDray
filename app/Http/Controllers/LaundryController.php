@@ -42,4 +42,15 @@ class LaundryController extends Controller
             return redirect("/laundry/customer");
         }
     }
+    public function cart() {
+        return view('pages.laundry.cart');
+    }
+    
+    public function inputDetail($category) {
+        return view('pages.laundry.input-detail', ['category' => $category]);
+    }
+    
+    public function historyLaundry() {
+        return view('pages.laundry.history-laundry');
+    }
 }
