@@ -29,17 +29,17 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('category')->insert([
             'nama' => 'pakaian',
-            'harga' => '3000',
+            'harga' => '7000',
             'icon' => 'ionicon-shirt-outline'
         ]);
         DB::table('category')->insert([
             'nama' => 'seprai',
-            'harga' => '5000',
+            'harga' => '35000',
             'icon' => 'ionicon-bed-outline'
         ]);
         DB::table('category')->insert([
             'nama' => 'sepatu',
-            'harga' => '4000',
+            'harga' => '3500',
             'icon' => 'hugeicons-running-shoes'
         ]);
     }

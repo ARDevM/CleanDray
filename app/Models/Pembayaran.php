@@ -18,7 +18,6 @@ class Pembayaran extends Model
         'id_customer',
         'tanggal_mulai',
         'tanggal_selesai',
-        'berat',
         'jumlah',
         'bukti',
         'status'

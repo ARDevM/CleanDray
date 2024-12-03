@@ -65,7 +65,6 @@ class DashboardController extends Controller
 
         return view('pages.dashboard-admin', compact('totalUsers', 'totalPembayaran'));
 
-
     }
 
     public function customer() {

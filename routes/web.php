@@ -54,8 +54,8 @@ Route::group(['middleware', 'auth'], function () {
 	Route::get('/dashboard/{auth}/category-laundry', [LaundryController::class, 'index'])->name('pages.categorylaundry');
 	Route::get('/dashboard/{auth}/cart-laundry', [LaundryController::class, 'cart'])->name('pages.cartlaundry');
 	Route::get('/dashboard/{auth}/input-detail/{category}', [LaundryController::class, 'inputDetail'])->name('pages.inputdetail');
+    Route::post('/dashboard/{auth}/add-laundry', [LaundryController::class, 'tambah'])->name('pages.addlaundry');
 	Route::get('/dashboard/{auth}/history-laundry', [LaundryController::class, 'historyLaundry'])->name('pages.historylaundry');
-
 
 
 	// Profile

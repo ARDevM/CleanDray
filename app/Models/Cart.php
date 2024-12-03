@@ -15,11 +15,7 @@ class Cart extends Model
 
     protected $fillable = [
         'id_customer',
-        'nama_makanan',
-        'harga_makanan',
-        'gambar_makanan',
-        'tipe_makanan',
-        'deskripsi_makanan',
-        'qty'
+        'jenis_laundry',
+        'jumlah',
     ];
 }

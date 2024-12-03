@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Pembayaran;
+use Illuminate\Http\Request;
 
 class LaundryController extends Controller
 {
@@ -14,18 +15,22 @@ class LaundryController extends Controller
         return view('pages.laundry.category', compact('categories'));
     }
 
-    public function tambah() {
-        $attributes = request()->validate([
+    public function tambah(Request $request) {
+        $attributes = $request->validate([
             'id_customer' => 'required|exists:users,id',
-            'tanggal_tagihan' => 'required',
-            'berat' => 'required',
+            'tanggal_mulai' => 'required',
+            'tanggal_selesai' => 'sometimes',
             'jumlah' => 'required'
         ]);
-        $attributes['jumlah'] = number_format($attributes['jumlah'], 0, ',', '.');
+        $category = Category::where('nama', $request->category)->first();
+        $jumlah = $request->jumlah * $category->harga;
+        $attributes['jumlah'] = number_format($jumlah, 0, ',', '.');
         $attributes['bukti'] = '';
-        $attributes['status'] = 'belum lunas';
+        $attributes['status'] = '0';
+        // var_dump($attributes);
         Pembayaran::create($attributes);
-        return redirect('/laundry/admin/');
+        return redirect(route('dashboard', ['auth' => 'admin']));
+        // return view('pages.laundry.cart');
     }
 
     public function upload(int $id) {
@@ -46,7 +51,7 @@ class LaundryController extends Controller
         return view('pages.laundry.cart');
     }
 
-    public function inputDetail($category) {
+    public function inputDetail($auth, $category) {
         $customers = User::where('auth', 'customer')->get();
         return view('pages.laundry.input-detail', [
             'category' => $category,
