@@ -19,7 +19,40 @@ class Pembayaran extends Model
         'tanggal_mulai',
         'tanggal_selesai',
         'jumlah',
+        'total',
         'bukti',
         'status'
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'id_customer', 'id');
+    }
+
+    protected static function booted()
+    {
+        static::deleted(function ($pembayaran) {
+            Cart::where('id_pembayaran', $pembayaran->id)->delete();
+        });
+        static::updated(function ($pembayaran) {
+            $cart = Cart::where('id_pembayaran', $pembayaran->id)->first();
+            if ($cart) {
+                $cart->update([
+                    'id_customer' => $pembayaran->id_customer,
+                    'total' => $pembayaran->total,
+                    'bukti' => $pembayaran->bukti,
+                    'status' => $pembayaran->status,
+                    'jumlah' => $pembayaran->jumlah,
+                    'tanggal_mulai' => $pembayaran->tanggal_mulai,
+                    'tanggal_selesai' => $pembayaran->tanggal_selesai
+                ]);
+            }
+        });
+    }
+
+
+    // public function carts()
+    // {
+    //     return $this->hasMany(Cart::class, 'id_pembayaran', 'id');
+    // }
 }

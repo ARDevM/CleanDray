@@ -1,25 +1,13 @@
 <?php
 use App\Http\Controllers\{
 	DashboardController,
-	DashboardPenggunaController,
 	LaundryController,
 	RegisterController,
 	LoginController,
-	ResetPassword,
-	ChangePassword,
 	PembayaranController,
-	PembayaranWifiController,
-	PembayaranKostController,
-	KostController,
-	DaftarMakananController,
     KelolaDataCustomerController,
-    ListrikController,
-	PembayaranListrikController,
-	WifiController,
-	SearchFilter,
 	ProfileController,
 	CartController,
-	OrderController,
 	HistoryOrderController,
 	HistoryOrderCustomerController
 };
@@ -52,9 +40,13 @@ Route::group(['middleware', 'auth'], function () {
 	Route::get('/dashboard/{auth}', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 	Route::get('/pembayaranlaundry/{auth}', [PembayaranController::class, 'index'])->name('pembayaran');
 	Route::get('/dashboard/{auth}/category-laundry', [LaundryController::class, 'index'])->name('pages.categorylaundry');
-	Route::get('/dashboard/{auth}/cart-laundry', [LaundryController::class, 'cart'])->name('pages.cartlaundry');
+	Route::get('/dashboard/{auth}/cart-laundry', [CartController::class, 'index'])->name('pages.cartlaundry');
+    Route::get('/dahboard/{auth}/make-order', [CartController::class, 'add'])->name('pages.makeOrder');
 	Route::get('/dashboard/{auth}/input-detail/{category}', [LaundryController::class, 'inputDetail'])->name('pages.inputdetail');
+	Route::get('/dashboard/{auth}/edit-input-detail/{id}', [LaundryController::class, 'editInputDetail'])->name('pages.editInputdetail');
+	Route::get('/dashboard/{auth}/delete-input-detail/{id}', [LaundryController::class, 'deleteInputDetail'])->name('pages.deleteInputdetail');
     Route::post('/dashboard/{auth}/add-laundry', [LaundryController::class, 'tambah'])->name('pages.addlaundry');
+    Route::post('/dashboard/{auth}/edit-laundry', [LaundryController::class, 'edit'])->name('pages.editlaundry');
 	Route::get('/dashboard/{auth}/history-laundry', [LaundryController::class, 'historyLaundry'])->name('pages.historylaundry');
 
 

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class LaundryController extends Controller
 {
@@ -23,14 +26,20 @@ class LaundryController extends Controller
             'jumlah' => 'required'
         ]);
         $category = Category::where('nama', $request->category)->first();
-        $jumlah = $request->jumlah * $category->harga;
-        $attributes['jumlah'] = number_format($jumlah, 0, ',', '.');
+        $total = $request->jumlah * $category->harga;
+        $attributes['total'] = number_format($total, 0, ',', '.');
         $attributes['bukti'] = '';
-        $attributes['status'] = '0';
-        // var_dump($attributes);
-        Pembayaran::create($attributes);
-        return redirect(route('dashboard', ['auth' => 'admin']));
-        // return view('pages.laundry.cart');
+        $attributes['status'] = '-1';
+
+        $pembayaran = Pembayaran::create($attributes);
+
+        Cart::create([
+            "id_customer" => $request->id_customer,
+            "id_pembayaran" => $pembayaran->id,
+            "id_category" => $category->id,
+            "jumlah" => $request->jumlah
+        ]);
+        return redirect()->route('pages.cartlaundry', ['auth' => 'admin']);
     }
 
     public function upload(int $id) {
@@ -47,8 +56,25 @@ class LaundryController extends Controller
             return redirect("/laundry/customer");
         }
     }
+
+    public function edit(Request $req)
+    {
+        $attributes = $req->validate([
+            'id_customer' => 'required|exists:users,id',
+            'tanggal_mulai' => 'required',
+            'tanggal_selesai' => 'sometimes',
+            'jumlah' => 'required'
+        ]);
+        $cart = Cart::where('id_pembayaran', $req->id_pembayaran)->first();
+        $total = $req->jumlah * $cart->category->harga;
+        $attributes['total'] = number_format($total, 0, ',', '.');
+        Pembayaran::where('id', $req->id_pembayaran)->update($attributes);
+        return redirect()->route('pages.cartlaundry', ['auth' => 'admin']);
+    }
+
     public function cart() {
-        return view('pages.laundry.cart');
+        $carts = Cart::get();
+        return view('pages.laundry.cart', compact($carts));
     }
 
     public function inputDetail($auth, $category) {
@@ -59,12 +85,29 @@ class LaundryController extends Controller
         ]);
     }
 
+    public function editInputDetail($auth, $id) {
+        $cart = Cart::where('id_pembayaran', $id)->first();
+        $pembayaran = $cart->pembayaran;
+        $category = $cart->category->nama;
+        $customers = User::where('auth', 'customer')->get();
+        return view('pages.laundry.edit-detail', compact('pembayaran', 'customers', 'category'));
+    }
+
+    public function deleteInputDetail($auth, $id)
+    {
+        $pembayaran = Pembayaran::findOrFail($id);
+        $pembayaran->delete();
+
+        return redirect()->route('pages.cartlaundry', ['auth' => 'admin'])
+                ->with('success', 'Data pembayaran dan cart terkait berhasil dihapus.');
+    }
+
     public function historyLaundry() {
         if (Auth::user()->auth == 'admin') {
             $pembayarans = Pembayaran::all();
         } else {
             $pembayarans = Pembayaran::where('id_customer', Auth::user()->id);
         }
-        return view('pages.laundry.history-laundry', compact('$pembayarans'));
+        return view('pages.laundry.history-laundry', compact('pembayarans'));
     }
 }

@@ -15,7 +15,18 @@ class Cart extends Model
 
     protected $fillable = [
         'id_customer',
-        'jenis_laundry',
+        'id_pembayaran',
+        'id_category',
         'jumlah',
     ];
+
+    public function pembayaran()
+    {
+        return $this->belongsTo(Pembayaran::class, 'id_pembayaran', 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id_category', 'id');
+    }
 }

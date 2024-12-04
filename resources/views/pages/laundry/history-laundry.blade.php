@@ -29,12 +29,13 @@
                     </thead>
                     <tbody>
                         @foreach ($pembayarans as $pembayaran)
+                        @if($pembayaran->status >= 0)
                         <tr class="bg-white">
                             <td>{{$pembayaran->id_customer}}</td>
-                            <td>{{$pembayaran->nama}}</td>
-                            <td>{{$pembayaran->tanggal_masuk}}</td>
+                            <td>{{$pembayaran->users->nama}}</td>
+                            <td>{{$pembayaran->tanggal_mulai}}</td>
                             <td>{{$pembayaran->tanggal_selesai}}</td>
-                            <td>{{$pembayaran->harga}}</td>
+                            <td>{{$pembayaran->total}}</td>
                             <td>
                                 @if ($pembayaran->bukti)
                                     <a href="#" class="btn btn-sm text-white" style="background-color: #003366" target="_blank">File</a>
@@ -55,6 +56,7 @@
                                 </select>
                             </td>
                         </tr>
+                        @endif
                         @endforeach
                     </tbody>
 

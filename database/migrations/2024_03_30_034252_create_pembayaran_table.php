@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai')->nullable();
             $table->string('jumlah');
+            $table->string('total');
             $table->string('bukti')->nullable();
             $table->string('status')->nullable();
         });

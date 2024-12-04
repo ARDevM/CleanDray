@@ -30,31 +30,11 @@ class User extends Authenticatable
         'gambar_profile',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    public function orders()
-    {
-        return $this->hasMany(Order::class, 'id_customer', 'id');
-    }
-    /**
-     * Always encrypt the password when it is updated.
-     *
-     * @param $value
-    * @return string
-    */
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);

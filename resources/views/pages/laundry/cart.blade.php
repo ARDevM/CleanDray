@@ -18,56 +18,35 @@
             </div>
 
             <div class="row">
-                <!-- Items -->
                 <div class="col-md-8">
-                    <!-- Card 1 -->
                     <div class="card shadow-sm mb-3 p-3">
-                        <h5 class="text-black fw-bold">Pakaian</h5>
-                        <p>Nama: example@gmail.com</p>
-                        <p>Berat: 2 Kg</p>
-                        <p>Harga/Kg: Rp.7,000</p>
-                        <p>Total: Rp.14,000</p>
+                        @foreach ($carts as $cart)
+                        <h5 class="text-black fw-bold">{{ucfirst($cart->category->nama)}}</h5>
+                        <p>Nama: {{$cart->pembayaran->users->nama}}</p>
+                        @if ($cart->category->nama == 'pakaian')
+                            <p>Berat: {{$cart->jumlah}} Kg</p>
+                        @else
+                            <p>Jumlah: {{$cart->jumlah}} Pasang</p>
+                        @endif
+                        <p>Harga/Kg: Rp. {{number_format($cart->category->harga, 0, ',', '.')}}</p>
+                        <p>Total: Rp. {{$cart->pembayaran->total}}</p>
                         <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-warning btn-sm">Edit</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <a class="btn btn-warning btn-sm" href='{{ route("pages.editInputdetail", ["auth" => "admin", "id" => $cart->pembayaran->id])}}'>Edit</a>
+                            <a class="btn btn-danger btn-sm" href='{{ route("pages.deleteInputdetail", ["auth" => "admin", "id" => $cart->pembayaran->id])}}'>Delete</a>
                         </div>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="card shadow-sm mb-3 p-3">
-                        <h5 class="text-black fw-bold">Sepatu</h5>
-                        <p>Nama: example@gmail.com</p>
-                        <p>Jumlah: 2</p>
-                        <p>Harga/PCS: Rp.30,000</p>
-                        <p>Total: Rp.60,000</p>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-warning btn-sm">Edit</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </div>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="card shadow-sm mb-3 p-3">
-                        <h5 class="text-black fw-bold">Seprai</h5>
-                        <p>Nama: example@gmail.com</p>
-                        <p>Jumlah: 2</p>
-                        <p>Harga/Satuan: Rp.15,000</p>
-                        <p>Total: Rp.30,000</p>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-warning btn-sm">Edit</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-
                 <!-- Price Summary -->
                 <div class="col-md-4">
                     <div class="card shadow-sm p-3">
                         <h5 class="text-black fw-bold">Rincian Harga</h5>
-                        <p>Pakaian: Rp.14,000</p>
-                        <p>Sepatu: Rp.60,000</p>
-                        <p>Seprai: Rp.30,000</p>
+                        @foreach ($summary as $item)
+                            <p>{{ ucfirst($item['jenis']) }}: Rp.{{ number_format($item['total_harga'], 0, ',', '.') }}</p>
+                        @endforeach
                         <hr>
-                        <h6 class="fw-bold">Total: Rp.114,000</h6>
-                        <button class="btn btn-primary w-100 mt-3" style="background-color: #003366">Kirim</button>
+                        <h6 class="fw-bold">Total: Rp.{{ number_format($summary->sum('total_harga'), 0, ',', '.') }}</h6>
+                        <a class="btn btn-primary w-100 mt-3" style="background-color: #003366" href="{{route('pages.makeOrder', ['auth' => 'admin'])}}">Kirim</a>
                     </div>
                 </div>
             </div>
