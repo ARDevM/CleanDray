@@ -12,7 +12,7 @@ class ProfileController extends Controller
       
             $user = auth()->user();
            
-            return view('pages.profile',[
+            return view('pages.laundry.profile',[
                 'user' => $user
             ]);
        

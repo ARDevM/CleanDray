@@ -18,13 +18,27 @@
                         </div>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item d-flex align-items-center gap-3">
+                    <!-- Notifikasi -->
+                    <a href="{{ route('notifikasi') }}" class="nav-link p-0 position-relative">
+                        {{ svg('ionicon-notifications', 'icon-sm text-light') }}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3 <!-- Jumlah notifikasi -->
+                            <span class="visually-hidden">Notifikasi Baru</span>
+                        </span>
+                    </a>
+
+                    <!-- Gambar Profil -->
                     <a href="{{ route('profile') }}" class="nav-link p-0">
-                        <div class="rounded-circle overflow-hidden d-flex align-items-center" style="width: 36px; height: 36px; background-color: #ffffff;">
-                            <img src="{{ asset('storage/' . Auth::user()->gambar_profile) }}" alt="Profile Picture" class="img-fluid" style="width: 100%; height: auto;">
+                        <div class="rounded-circle overflow-hidden d-flex align-items-center" 
+                            style="width: 36px; height: 36px; background-color: #ffffff;">
+                            <img src="{{ asset('storage/' . Auth::user()->gambar_profile) }}" 
+                                alt="Profile Picture" class="img-fluid" 
+                                style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>

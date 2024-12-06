@@ -9,7 +9,8 @@ use App\Http\Controllers\{
 	ProfileController,
 	CartController,
 	HistoryOrderController,
-	HistoryOrderCustomerController
+	HistoryOrderCustomerController,
+    NotifikasiController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -49,9 +50,10 @@ Route::group(['middleware', 'auth'], function () {
     Route::post('/dashboard/{auth}/edit-laundry', [LaundryController::class, 'edit'])->name('pages.editlaundry');
 	Route::get('/dashboard/{auth}/history-laundry', [LaundryController::class, 'historyLaundry'])->name('pages.historylaundry');
 
-
+	
+	Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi');
 	// Profile
-	Route::get('/dashboard/profile', [ProfileController::class, 'index'])->name('profile');
+	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 	Route::put('/update-profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
 	// Dashboard
