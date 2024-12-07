@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     public function index() {
-        
-      
+
+
             $user = auth()->user();
-           
+
             return view('pages.laundry.profile',[
                 'user' => $user
             ]);
-       
+
     }
 
 
@@ -27,14 +27,14 @@ class ProfileController extends Controller
             'no_hp' => 'required',
             'gambar_profile' => 'sometimes|image|mimes:jpeg,jpg,png,gif',
         ]);
-    
+
         $user = User::find($id);
-    
+
         if ($request->hasFile('gambar_profile')) {
             $file = $request->file('gambar_profile');
             $fileName = $file->getClientOriginalName();
             $filePath = $file->storeAs('public', $fileName);
-    
+
             $user->update([
                 "name" => $attributes['name'],
                 "email" => $attributes['email'],
@@ -45,10 +45,10 @@ class ProfileController extends Controller
         } else {
             $user->update($request->except(['_token', 'gambar_profile']));
         }
-    
+
         return redirect()->route('profile');
     }
-    
+
 
 
 
@@ -56,15 +56,15 @@ class ProfileController extends Controller
         // if ($request->filled('name')) {
         //     $user->name = $request->name;
         // }
-        
+
         // if ($request->filled('email')) {
         //     $user->email = $request->email;
         // }
-        
+
         // if ($request->filled('no_kamar')) {
         //     $user->no_kamar = $request->no_kamar;
         // }
-        
+
         // if ($request->filled('no_hp')) {
         //     $user->no_hp = $request->no_hp;
         // }
@@ -80,9 +80,9 @@ class ProfileController extends Controller
         // if ($user->isDirty()) {
         //     $user->save();
         // }
-        
+
         // $user->save();
 
-        
+
     }
 

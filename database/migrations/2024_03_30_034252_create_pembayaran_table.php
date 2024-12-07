@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('total');
             $table->string('bukti')->nullable();
             $table->string('status')->nullable();
+            $table->string('status_bukti')->nullable();
         });
     }
 

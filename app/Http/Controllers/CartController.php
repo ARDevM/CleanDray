@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\Notifikasi;
 
 class CartController extends Controller
 {
@@ -39,6 +40,11 @@ class CartController extends Controller
                 $cart->pembayaran->update(['status' => '0']);
             }
         }
+        Notifikasi::create([
+            'user_id' => $carts->first()->id_customer,
+            'judul' => 'Laundry ditambahkan',
+            'pesan' => 'Laundry baru telah ditambahkan untuk anda'
+        ]);
         Cart::truncate();
         return redirect(route('pages.historylaundry', ['auth' => 'admin']));
     }

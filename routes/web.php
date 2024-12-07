@@ -5,11 +5,8 @@ use App\Http\Controllers\{
 	RegisterController,
 	LoginController,
 	PembayaranController,
-    KelolaDataCustomerController,
 	ProfileController,
 	CartController,
-	HistoryOrderController,
-	HistoryOrderCustomerController,
     NotifikasiController
 };
 use Illuminate\Support\Facades\Route;
@@ -49,37 +46,19 @@ Route::group(['middleware', 'auth'], function () {
     Route::post('/dashboard/{auth}/add-laundry', [LaundryController::class, 'tambah'])->name('pages.addlaundry');
     Route::post('/dashboard/{auth}/edit-laundry', [LaundryController::class, 'edit'])->name('pages.editlaundry');
 	Route::get('/dashboard/{auth}/history-laundry', [LaundryController::class, 'historyLaundry'])->name('pages.historylaundry');
+    Route::post('/updateLaundry', [LaundryController::class, 'update'])->name('pages.updateStatus');
+    Route::post('/upload-bukti/', [LaundryController::class, 'upload'])->name('upload.bukti');
 
-	
+
 	Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi');
+    Route::post('/notifikasi/{id}/mark-as-read', [NotifikasiController::class, 'markAsRead'])->name('notifikasi.markAsRead');
+
 	// Profile
 	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 	Route::put('/update-profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
 	// Dashboard
 	Route::get('/', [DashboardController::class, 'index'])->middleware('auth')->name('home');
-	Route::get('/test',[DashboardController::class, 'test']);
-
-	// Kelola Data Customer
-	Route::get('/dashboard/{auth}/kelolaDataCustomer', [KelolaDataCustomerController::class, 'index'])->name('kelola.data.customer');
-	Route::delete('/hapuscustomer/{id}', [KelolaDataCustomerController::class, 'destroy'])->name('delete-customer');
-
-	// Kelola Data Pemesanan Makanan
-	Route::get('dashboard/{auth}/history-orders', [HistoryOrderController::class, 'showHistoryOrders'])->name('pages.historyorders');
-	Route::get('/ubah-status/{id}/{status}', [HistoryOrderController::class, 'ubah'])->name('ubah-status-order');
-	Route::delete('/hapus-order/{id}', [HistoryOrderController::class, 'destroy'])->name('hapus-order');
-
-	// History
-	Route::get('/dashboard/{auth}/order-history', [HistoryOrderCustomerController::class, 'index'])->name('order-history');
-
-	// Cart
-	Route::get('/dashboard/{auth}/cart', [CartController::class, 'index'])->name('cart')->middleware('auth');
-	Route::post('/addToCart/{id}/perform', [CartController::class, 'addToCart'])->name('add-cart.perform')->middleware('auth');
-	Route::delete('/hapuscart/{id}', [CartController::class, 'destroy'])->name('delete-cart');
-	Route::post('/bayar', [CartController::class, 'bayar'])->name('bayar-cart');
-	Route::get('/dashboard/{auth}/pembayaranmakanan', [CartController::class, 'pembayaranview']);
-	Route::put('/uploadbukti/{id}/perform', [CartController::class, 'uploadbukti'])->name('upload-bukti.perform');
-	Route::get('/dashboard/{auth}/terimakasih', [CartController::class, 'terimakasih'])->name('terimakasih')->middleware('auth');
 
 	// Notifikasi
 	Route::get('/dashboard/{auth}/notification', [CartController::class, 'showNotifications'])->name('notifications.index')->middleware('auth');

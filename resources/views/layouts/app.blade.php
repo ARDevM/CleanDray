@@ -19,6 +19,18 @@
     <link href="{{url('/assets/css/nucleo-svg.css')}}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{url('assets/css/argon-dashboard.css')}}" rel="stylesheet" />
+    <style>
+        .modal-header {
+            background-color: #003366;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #003366;
+            border: none;
+        }
+    </style>
+
 </head>
 
 <body class="{{ $class ?? '' }}">

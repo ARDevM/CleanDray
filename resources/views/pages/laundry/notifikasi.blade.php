@@ -1,40 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+@include('layouts.navbars.auth.topnav', ['title' => 'Dashboard', 'titleSub' => ''. ucfirst(Auth::user()->auth). ' : '. Auth::user()->nama])
 <div class="container py-5">
     <div class="card shadow border-0">
-        <!-- Header -->
         <div class="card-header text-white">
             <h5 class="fw-bold mb-0">Notifikasi</h5>
         </div>
-        <!-- style="background-color: #003366" -->
-        <!-- Body -->
         <div class="card-body">
             <ul class="list-group">
-                <!-- Notifikasi Item -->
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Project A Selesai</div>
-                        Project A telah selesai dan butuh konfirmasi.
-                    </div>
-                    <small class="text-muted">2 jam yang lalu</small>
-                </li>
-
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Feedback Baru</div>
-                        Anda menerima feedback dari client X.
-                    </div>
-                    <small class="text-muted">1 hari yang lalu</small>
-                </li>
-
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Task Baru</div>
-                        Task baru "Design Logo" telah ditambahkan ke tim Anda.
-                    </div>
-                    <small class="text-muted">3 hari yang lalu</small>
-                </li>
+                @forelse ($notifikasis as $notifikasi)
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">{{ $notifikasi->judul }}</div>
+                            {{ $notifikasi->pesan }}
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <small class="text-muted me-3">{{ $notifikasi->created_at->diffForHumans() }}</small>
+                            @if (!$notifikasi->is_read)
+                                <button class="btn btn-sm btn-outline-primary mark-as-read-btn"
+                                        data-id="{{ $notifikasi->id }}">Tandai Dibaca</button>
+                            @endif
+                        </div>
+                    </li>
+                @empty
+                    <li class="list-group-item">Tidak ada notifikasi baru.</li>
+                @endforelse
             </ul>
         </div>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Notifikasi;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Pembayaran;
@@ -30,6 +31,7 @@ class LaundryController extends Controller
         $attributes['total'] = number_format($total, 0, ',', '.');
         $attributes['bukti'] = '';
         $attributes['status'] = '-1';
+        $attributes['status_bukti'] = '0';
 
         $pembayaran = Pembayaran::create($attributes);
 
@@ -42,18 +44,19 @@ class LaundryController extends Controller
         return redirect()->route('pages.cartlaundry', ['auth' => 'admin']);
     }
 
-    public function upload(int $id) {
-        request()->validate([
-            'upload-bukti' => 'required|image|mimes:jpeg,jpg,png,gif',
+    public function upload(Request $req) {
+        $validated = $req->validate([
+            'file_bukti' => 'required|image|mimes:jpeg,jpg,png,gif',
+            'id_pembayaran' => 'required|exists:pembayaran,id'
         ]);
-        if (request()->file()) {
-            $fileName = time().'_'.Auth::user()->username.'.'.request()->file('upload-bukti')->extension();
-            $filePath = request()->file('upload-bukti')->storeAs('bukti', $fileName, 'public');
-            $data = Pembayaran::where('id', $id)->update([
+        if ($req->file()) {
+            $fileName = time().'_'.Auth::user()->nama.'.'.$req->file('file_bukti')->extension();
+            $filePath = $req->file('file_bukti')->storeAs('bukti', $fileName, 'public');
+            Pembayaran::where('id', $validated['id_pembayaran'])->update([
                 "bukti" => "bukti/" . $fileName,
-                "status" => "lunas"
+                "status_bukti" => 1,
             ]);
-            return redirect("/laundry/customer");
+            return redirect()->route('pages.historylaundry', ['auth' => 'customer']);
         }
     }
 
@@ -106,8 +109,37 @@ class LaundryController extends Controller
         if (Auth::user()->auth == 'admin') {
             $pembayarans = Pembayaran::all();
         } else {
-            $pembayarans = Pembayaran::where('id_customer', Auth::user()->id);
+            $pembayarans = Pembayaran::where('id_customer', Auth::user()->id)->get();
         }
+        // var_dump($pembayarans);
         return view('pages.laundry.history-laundry', compact('pembayarans'));
+    }
+
+    public function update(Request $request)
+    {
+        $validated = $request->validate([
+            'pembayaran_id' => 'required|exists:pembayaran,id',
+            'status' => 'required|in:0,1',
+            'type' => 'required'
+        ]);
+
+        $pembayaran = Pembayaran::find($validated['pembayaran_id']);
+        if ($validated['type'] == 'bukti') {
+            $pembayaran->update([
+                "status_bukti" => $validated['status']
+            ]);
+        } else {
+            if ($validated['status'] == 1) {
+                Notifikasi::create([
+                    "user_id" => $pembayaran->id_customer,
+                    "judul" => "Laundry telah selesai",
+                    "pesan" => "Laundry anda telah selesai"
+                ]);
+            }
+            $pembayaran->update([
+                "status" => $validated['status']
+            ]);
+        }
+        return response()->json(['success' => true]);
     }
 }

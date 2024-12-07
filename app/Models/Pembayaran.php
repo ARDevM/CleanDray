@@ -21,7 +21,8 @@ class Pembayaran extends Model
         'jumlah',
         'total',
         'bukti',
-        'status'
+        'status',
+        'status_bukti'
     ];
 
     public function users()

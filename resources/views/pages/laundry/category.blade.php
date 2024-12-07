@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('layouts.navbars.auth.topnav', ['title' => 'Category', 'titleSub' => ''. ucfirst(Auth::user()->auth). ' : '. Auth::user()->nama])
 <div class="container-fluid py-4">
     <div class="row">
         <!-- Sidebar -->
