@@ -30,7 +30,7 @@ class DashboardController extends Controller
     public function dashboard() {
         if (Auth::check()) {
             if (Auth::user()->auth == 'admin') {
-                $totalLaundry = Pembayaran::where('status', 'lunas')->get()->sum(function ($payment) {
+                $totalLaundry = Pembayaran::where('status_bukti', 1)->get()->sum(function ($payment) {
                     return intval(str_replace('.', '', $payment->jumlah));
                 });
 
